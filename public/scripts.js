@@ -1,5 +1,7 @@
 const socket = io('http://localhost:3000/');
 
 $(document).ready(() => {
-    alert(1);
+    $('#btnCreateRoom').click(() => {
+        socket.emit('tao-room', $('#txtRoom').val());
+    });
 })

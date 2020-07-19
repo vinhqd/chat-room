@@ -10,6 +10,10 @@ const io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
     console.log('Co nguoi connect id: ' + socket.id);
+    console.log(socket.adapter.rooms);
+    socket.on('tao-room', data => {
+        socket.join(data)
+    })
 })
 
 server.listen(3000, () => console.log('Listening port 3000.'));
