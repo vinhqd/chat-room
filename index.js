@@ -10,9 +10,26 @@ const io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
     console.log('Co nguoi connect id: ' + socket.id);
-    console.log(socket.adapter.rooms);
+
     socket.on('tao-room', data => {
-        socket.join(data)
+        socket.join(data);
+        socket.Phong = data;
+        let mang = Object.keys(socket.adapter.rooms);
+        io.sockets.emit('server-send-room', mang);
+        socket.emit('server-send-room-socket', data);
+    });
+
+    socket.on('user-chat', data => {
+        io.sockets.in(socket.Phong).emit('server-chat', data);
+    });
+
+    socket.on('chuyen-room', data => {
+        console.log(data);
+        socket.leave(data.leave);
+        socket.join(data.new);
+        socket.emit('server-send-room-socket', data.new);
+        let mang = Object.keys(socket.adapter.rooms);
+        io.sockets.emit('server-send-room', mang);
     })
 })
 
